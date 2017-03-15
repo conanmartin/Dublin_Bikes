@@ -1,3 +1,11 @@
+import time
+import requests
+import json
+import flask
+from pprint import pprint
+import pandas as pd
+import csv
+
 '''
 Created by Conan Martin
 13th March 2017
@@ -6,18 +14,10 @@ Team Infinite Loop: Conan Martin, Karl Roe, David Surridge.
 Git: https://github.com/DavidSurridge/DublinBikes.git
 '''
 '''
-Extractor
-For Scraping Dublin Bikes and OpenWeatherMap APIs
+Bikes Extractor
+For Scraping Dublin Bikes API
 '''
 # JCD API Key: b651d697e937e2cd75f21e3f5ce001ace26b4354
-# OpenWeatherMap API Key: 4cd167bc85dff937818ea9a5eb6fa550
-import time
-import requests
-import json
-import flask
-from pprint import pprint
-import pandas as pd
-from pandas.io.json import json_normalize
 
 
 def bike_extract(file_name, print_output):
@@ -32,28 +32,8 @@ def bike_extract(file_name, print_output):
         pprint(bike_data)
 
 
-
-def weather_extract(file_name, print_output):
-    weather_key = "4cd167bc85dff937818ea9a5eb6fa550"
-    city_id = "2964574"
-    open_weather_uri = "http://api.openweathermap.org/data/2.5/weather"
-    r = requests.get(open_weather_uri, params={"APPID": weather_key, "id": city_id, "units": "metric"})
-    weather_data = json.loads(r.text)
-    if print_output:
-        pprint(weather_data)
-    # result = json_normalize(weather_data, 'main[0]')
-    # print(result)
-    with open(file_name, 'w') as f:
-        json.dump(weather_data, f)
-    # weather_df = pd.DataFrame(weather_data)
-    # weather_df.to_csv(file_name, mode='a', header=False)
-
-
-
-
 def main():
-    # bike_extract("dublin_bikes_output.csv", True)
-    weather_extract("open_weather_outputjson.json", True)
+    bike_extract("dublin_bikes_output.csv", True)
 
 if __name__ == '__main__':
     main()
