@@ -38,7 +38,10 @@ def weather_extract(file_name, print_output):
 	# df.to_csv("open_weather_output.csv", mode='a', header=False)
 
 def main():
-	weather_extract("open_weather_output.json", True)
+	while True:
+		weather_extract("open_weather_output.json", False)
+		# Runs every hour
+		time.sleep(3600)
 
 
 if __name__ == '__main__':
