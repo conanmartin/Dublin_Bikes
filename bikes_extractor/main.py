@@ -7,8 +7,6 @@ import sqlalchemy
 import pymysql
 from sqlalchemy import create_engine
 
-
-
 '''
 Created by Conan Martin
 13th March 2017
@@ -48,11 +46,21 @@ def bike_extract(file_name, print_output):
 		connection = engine.connect()
 		connection.execute("INSERT INTO bikes_dynamic SELECT * FROM temp_table ON DUPLICATE KEY UPDATE bikes_dynamic.status=temp_table.status")
 	except:
+		print("Error")
+		error_time = time.time()
+		f = open('error_log', 'a')
+		f.write('Error at: ' + error_time + '\n')
+		f.close()
 		pass
 
 def main():
+	run = 0
 	while True:
+		run += 1
+		print(run)
+		print("starting")
 		bike_extract("dublin_bikes_output.csv", False)
+		print("stopping")
 		# Runs every 5 minutes
 		time.sleep(300)
 
