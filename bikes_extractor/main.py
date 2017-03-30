@@ -30,37 +30,31 @@ def bike_extract(file_name, print_output):
 	#API request
 	try:
 		r = requests.get(dub_bikes_uri, params={"apiKey": bike_key, "contract": contract})
+		bike_data = json.loads(r.text)
+		df = pd.DataFrame(bike_data)
+		df['last_update'] = pd.to_datetime((df['last_update'] + 3600000) * 10e5)
+		clean_df = df[['number', 'last_update', 'available_bike_stands', 'available_bikes', 'status']]
+		print(clean_df)
+
+		#to csv
+		df.to_csv(file_name, mode='a', header=False)
+		if print_output:
+			pprint(bike_data)
+
+		# to mySQL
+		# creates temporary table with latest df, then adds non-existing rows to bikes_dynamic.
+		engine = create_engine("mysql+pymysql://DavidSurridge:MyGerryAdams@dublinbikesmysql.cqcpf75mkbbq.us-west-2.rds.amazonaws.com:3306/myDublinBikes", echo = True)
+		clean_df.to_sql(name='temp_table', con=engine, if_exists='replace', index=False)
+		connection = engine.connect()
+		connection.execute("INSERT INTO bikes_dynamic SELECT * FROM temp_table ON DUPLICATE KEY UPDATE bikes_dynamic.status=temp_table.status")
 	except:
 		pass
 
-	bike_data = json.loads(r.text)
-	df = pd.DataFrame(bike_data)
-	df['last_update'] = pd.to_datetime((df['last_update'] + 3600000) * 10e5)
-	clean_df = df[['number', 'last_update', 'available_bike_stands', 'available_bikes', 'status']]
-	print(clean_df)
-
-	#to csv
-	df.to_csv(file_name, mode='a', header=False)
-	if print_output:
-		pprint(bike_data)
-
-	# to mySQL
-	dburi = 'dublinbikesmysql.cqcpf75mkbbq.us-west-2.rds.amazonaws.com'
-	db = 'Dublin_bikes'
-	username = 'DavidSurridge'
-	port = '3306'
-	password = 'MyGerryAdams'
-	print(df['status'])
-
-	engine = create_engine("mysql+pymysql://DavidSurridge:MyGerryAdams@dublinbikesmysql.cqcpf75mkbbq.us-west-2.rds.amazonaws.com:3306/myDublinBikes", echo = True)
-	clean_df.to_sql(name='bikes_dynamic', con=engine, if_exists='append', index=False)
-
-
 def main():
-	# while True:
-	bike_extract("dublin_bikes_output.csv", False)
-	#Runs every 5 minutes
-	# time.sleep(300)
+	while True:
+		bike_extract("dublin_bikes_output.csv", False)
+		# Runs every 5 minutes
+		time.sleep(300)
 
 if __name__ == '__main__':
 	main()
