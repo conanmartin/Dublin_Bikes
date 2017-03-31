@@ -7,11 +7,11 @@ from flask import Flask
 
 from sqlalchemy import create_engine
 import pymysql  
-app =Flask(__name__)
+app =Flask(__name__, static_url_path='/static')
 
 @app.route("/")
 def hello():
-    return "hello world"
+    return app.send_static_file('index.html')
 
 if __name__ == "__main__":
     app.run()
