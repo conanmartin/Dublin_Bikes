@@ -4,14 +4,15 @@ Created on 31 Mar 2017
 @author: user 
 '''
 from flask import Flask
-
+from flask import render_template
 from sqlalchemy import create_engine
-import pymysql  
-app =Flask(__name__, static_url_path='/static')
+import pymysql 
+ 
+app =Flask(__name__, static_url_path='')
 
 @app.route("/")
 def hello():
-    return app.send_static_file('index.html')
+    return render_template("index.html")
 
 if __name__ == "__main__":
     app.run()
