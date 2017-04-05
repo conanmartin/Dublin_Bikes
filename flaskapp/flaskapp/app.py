@@ -9,7 +9,7 @@ from sqlalchemy import create_engine
 import pymysql 
 import simplejson as json
 from pprint import pprint
-app =Flask(__name__, static_url_path='')
+app = Flask(__name__, static_url_path='')
 
 
 @app.route("/")
@@ -31,12 +31,21 @@ def get_stations():
 
 	return jsonify(stations=stations)
 
-@app.route("/available/<int:station_id>")
+@app.route("/available_weekly/<int:station_id>")
 def get_dynamic_stations(station_id):
 	engine = connect_to_database()
 	conn = engine.connect()
 	data = []
-	rows = conn.execute("SELECT available_bikes from bikes_dynamic where number = {};".format(station_id))
+	# SELECT
+	# number, dayofweek(last_update), avg(available_bikes)
+	# FROM
+	# myDublinBikes.bikes_dynamic
+	# where
+	# number = 5 and time(last_update) > '05:00:00'
+	# group
+	# by
+	# dayofweek(last_update);
+	rows = conn.execute("SELECT number, dayofweek(last_update), avg(available_bikes) from bikes_dynamic where time(last_update) > '05:00:00' and number = {} group by dayofweek(last_update);".format(station_id))
 	for row in rows:
 		data.append(dict(row))
 
