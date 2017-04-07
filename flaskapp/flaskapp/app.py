@@ -36,7 +36,7 @@ def get_dynamic_stations(station_id):
 	engine = connect_to_database()
 	conn = engine.connect()
 	data = []
-	rows = conn.execute("SELECT dayofweek(last_update), avg(available_bikes) from bikes_dynamic where time(last_update) > '05:00:00' and number = {} group by dayofweek(last_update);".format(station_id))
+	rows = conn.execute("SELECT dayofweek(last_update), avg(available_bikes) as avg_bikes from bikes_dynamic where time(last_update) > '05:00:00' and number = {} group by dayofweek(last_update);".format(station_id))
 	for row in rows:
 		data.append(dict(row))
 
