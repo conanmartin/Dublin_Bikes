@@ -48,7 +48,7 @@
 			<option value=4>Thursday</option>
 			<option value=5>Friday</option>
 			<option value=6>Saturday</option>
-			<option value=7>Sunday</option>
+			<option value=0>Sunday</option>
 		</select>
 	</div>
 	<div id="charts_div">
@@ -108,6 +108,11 @@
 
 $( "#stations_drop" ).change(function() {
   run_weekly();
+    run_daily();
+});
+
+$( "#days_drop" ).change(function() {
+    run_daily();
 });
 
   function run_weekly() {
@@ -120,27 +125,73 @@ $( "#stations_drop" ).change(function() {
         }
         }
             )};
+function run_daily() {
+  var stations_value = $('#stations_drop').val();
+    var day_value = $('#days_drop').val();
+  $.getJSON("http://127.0.0.1:5000/available_daily/" + stations_value + "/" + day_value, function(data) {
+		if ('available' in data) {
+        var available = data.available;
+        console.log('daily_chart_data', available);
+        drawDailyChart(available);
+        }
+        }
+            )};
 
 function drawChart(available) {
     var data = new google.visualization.DataTable();
     data.addColumn('string', 'Day');
     data.addColumn('number', 'Bikes Available');
     data.addRows([
-        ['Mon', parseInt(available[0].avg_bikes)],
-        ['Tue', parseInt(available[1].avg_bikes)],
-        ['Wed', parseInt(available[2].avg_bikes)],
-        ['Thu', parseInt(available[3].avg_bikes)],
-        ['Fri', parseInt(available[4].avg_bikes)],
-        ['Sat', parseInt(available[5].avg_bikes)],
-        ['Sun', parseInt(available[6].avg_bikes)]
+        ['Mon', parseInt(available[1].avg_bikes)],
+        ['Tue', parseInt(available[2].avg_bikes)],
+        ['Wed', parseInt(available[3].avg_bikes)],
+        ['Thu', parseInt(available[4].avg_bikes)],
+        ['Fri', parseInt(available[5].avg_bikes)],
+        ['Sat', parseInt(available[6].avg_bikes)],
+        ['Sun', parseInt(available[0].avg_bikes)]
   ]);
             var options = {
-              title: 'Average number of bikes available for station',
-              curveType: 'function',
+              title: 'Average number of bikes available per day',
+              
               legend: {position: 'bottom'}
             };
 
         var chart = new google.visualization.LineChart(document.getElementById('weekly_chart'));
+
+        chart.draw(data, options);
+      };
+        
+function drawDailyChart(available) {
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'hour');
+    data.addColumn('number', 'Bikes Available');    
+    data.addRows([
+        ['06:00', parseInt(available[0].avg_bikes)],
+        ['07:00', parseInt(available[1].avg_bikes)],
+        ['08:00', parseInt(available[2].avg_bikes)],
+        ['09:00', parseInt(available[3].avg_bikes)],
+        ['10:00', parseInt(available[4].avg_bikes)],
+        ['11:00', parseInt(available[5].avg_bikes)],
+        ['12:00', parseInt(available[6].avg_bikes)],
+        ['13:00', parseInt(available[7].avg_bikes)],
+        ['14:00', parseInt(available[8].avg_bikes)],
+        ['15:00', parseInt(available[9].avg_bikes)],
+        ['16:00', parseInt(available[10].avg_bikes)],
+        ['17:00', parseInt(available[11].avg_bikes)],
+        ['18:00', parseInt(available[12].avg_bikes)],
+        ['19:00', parseInt(available[13].avg_bikes)],
+        ['20:00', parseInt(available[14].avg_bikes)],
+        ['21:00', parseInt(available[15].avg_bikes)],
+        ['22:00', parseInt(available[16].avg_bikes)],
+        ['23:00', parseInt(available[16].avg_bikes)]
+  ]);
+            var options = {
+              title: 'Average number of bikes available for station',
+              
+              legend: {position: 'bottom'}
+            };
+
+        var chart = new google.visualization.LineChart(document.getElementById('daily_chart'));
 
         chart.draw(data, options);
       };
