@@ -42,6 +42,17 @@ def get_dynamic_stations(station_id):
 
     return jsonify(available=data)
 
+@app.route("/current/<int:station_id>")
+def get_current_stations(station_id):
+    engine = connect_to_database()
+    conn = engine.connect()
+    data = []
+    rows = conn.execute("SELECT * from temp_table where number = {};".format(station_id))
+    for row in rows:
+        data.append(dict(row))
+
+    return jsonify(available=data)
+
 @app.route("/available_daily/<int:station_id>/<int:day_num>")
 def get_daily_stations(station_id, day_num):
     engine = connect_to_database()
