@@ -1,325 +1,455 @@
 <!DOCTYPE html>
 <html>
-  <head>
-          <link href="https://fonts.googleapis.com/css?family=Lato:300" rel="stylesheet">
-      <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js"></script>
-  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-  <script type="text/javascript"> google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);</script>
+<head>
 
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
-    <meta charset="utf-8">
-    <title>Dublin Bikes Live</title>
-  <style>
+	<script src="app.js" type="text/javascript">
+	</script>
+	<link href="https://fonts.googleapis.com/css?family=Lato:300" rel="stylesheet">
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript">
+	</script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/0.10.0/lodash.min.js" type="text/javascript">
+	</script>
+	<script src="https://www.gstatic.com/charts/loader.js" type="text/javascript">
+	</script>
+	<script type="text/javascript">
+	google.charts.load('current', {'packages':['corechart']});
+	     google.charts.setOnLoadCallback(drawChart);
+	</script>
+	<meta content="initial-scale=1.0, user-scalable=no" name="viewport">
+	<meta charset="utf-8">
+	<title>Dublin Bikes Live</title>
 
-        #image{
-            height:20px;
-        }
+<style>
+        #weatherblock {
+        position: fixed;
+        margin-top: 1%;
+        margin-left: 73%;
+        display: none;
+    }
+    .weather-app {
+        margin: auto;
+        width: 300px;
+        height: 170px;
+        box-shadow: 1px 1px 70px #afafaf;
+        overflow: hidden;
+        text-align: center;
+        font-family: "helvetica";
+    }
+    .left {
+        float: left;
+        background: #f5f5f5;
+        padding: 10px;
+        width: 150px;
+        height: 100%;
+        color: #000000;
+        font-family: "helvetica";
+    }
+    .temperature {
+        padding-top: 18px;
+        margin-top: 30px;
+        margin-bottom: 5px;
+        font-size: 32px;
+        font-weight: bold;
+        width: 150px;
+    }
+    .location {
+        font-size: 18px;
+        width: 10%;
+        width: 150px;
+        font-family: "helvetica";
+    }
+    .right {
+        font-family: helvetica;
+        float: right;
+        width: 130px;
+        height: 100%;
+    }
+    .top {
+        height: 100px;
+        width: 100%;
+        margin: auto;
+        background: #f5f5f5;
+    }
+    .top img {
+        margin-top: 24px;
+    }
+    .bottom {
+        height: 70px;
+        background: #f5f5f5;
+        color: 000000;
+        font-weight: bold;
+        padding-bottom: 30px;
+        margin-bottom: 0px;
+    }
+    .humidity {
+        padding: 8px;
+        padding-bottom: 10px;
+    }
+    .wind {}
+    #title {
+        background-color: rgba(206, 204, 207, 0.33);
+        text-align: center;
+        padding-top: 12px;
+        padding-bottom: 8px;
+        font-family: 'Lato', sans-serif;
+        font-size: 60px;
+    }
+    #message {
+        background-color: rgba(206, 204, 207, 0.33);
+        text-align: center;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        font-family: 'Lato', sans-serif;
+        font-size: 20px;
+    }
+    #full {
+        background-color: rgba(206, 204, 207, 0.33);
+    }
+    #drop_downs {
+        background-color: rgba(206, 204, 207, 0.33);
+        text-align: center;
+        margin: auto;
+        padding-top: 14px;
+        width: 100%;
+    }
+    #charts_div {
+        background-color: rgba(206, 204, 207, 0.33);
+        text-align: center;
+        padding-top: 20px;
+    }
 
-        #title{
-
-            background-color: rgba(206,204,207,0.33);
-            text-align: center;
-            padding-top: 12px;
-            padding-bottom: 8px;
-            font-family: 'Lato', sans-serif;
-            font-size: 60px;
-
-        }
-
-        #message{
-
-            background-color: rgba(206,204,207,0.33);
-            text-align: center;
-            padding-top: 8px;
-            padding-bottom: 8px;
-            font-family: 'Lato', sans-serif;
-            font-size: 20px;
-
-        }
-
-        #full{
-            background-color:  rgba(206,204,207,0.33);
-
-        }
-
-        #drop_downs{
-            background-color:  rgba(206,204,207,0.33);
-            text-align: center;
-              margin: auto;
-            padding-top: 14px;
-            width: 100%;
-
-
-        }
-
-      #charts_div{
-          background-color: rgba(206,204,207,0.33);
-          text-align: center;
-          padding-top: 20px;
-
-
-
-
-      }
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
+    #map {
         height: 52%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
+    }
+
+    html, body {
         height: 100%;
         margin: 0;
         padding: 0;
-      }
-      #charts_div {
-      width: 100%;
-      height: 25%;
-      }
-      #daily_chart {
-      height: 100%:
-      }
-      .chart {
-      width: 32%;
-      height 25%;
-      display: inline-block;
-      }
-
-    </style>
-  </head>
-  <body>
-    <div id="map"></div>
-
-     <div id="title"> Hello. </div>
-    <div id="message"> Live and historical Dublin Bikes Info | Free for Everyone. </div>
+    }
+    #charts_div {
+        width: 100%;
+        height: 25%;
+    }
+    #daily_chart {
+        height: 100%:
+    }
+    .chart {
+        width: 32%;
+        height 25%;
+        display: inline-block;
+        box-shadow: 1px 1px 70px #afafaf;
+        border-spacing: 10px;
+    }
+</style>
 
 
+</head>
+<body>
+	<div id="map"></div>
+	<div id="title">
+		Hello.
+	</div>
+	<div id="message">
+		Live and historical Dublin Bikes Info | Free for Everyone.
+	</div>
 	<div id="drop_downs">
-		<select id="stations_drop" name="Stations"></select>
-		<select id="days_drop" name="Days">
-			<option value=1>Monday</option>
-			<option value=2>Tuesday</option>
-			<option value=3>Wednesday</option>
-			<option value=4>Thursday</option>
-			<option value=5>Friday</option>
-			<option value=6>Saturday</option>
-			<option value=7>Sunday</option>
-		</select>
+		<select id="stations_drop" name="Stations">
+		</select> <select id="days_drop" name="Days">
+			<option value="1">
+				Monday
+			</option>
+			<option value="2">
+				Tuesday
+			</option>
+			<option value="3">
+				Wednesday
+			</option>
+			<option value="4">
+				Thursday
+			</option>
+			<option value="5">
+				Friday
+			</option>
+			<option value="6">
+				Saturday
+			</option>
+			<option value="7">
+				Sunday
+			</option>
+		</select> <button onclick="myFunction()">Live Weather</button>
 	</div>
 	<div id="charts_div">
-		<div class ="chart" id="daily_chart"></div>
-		<div class ="chart" id="weekly_chart"></div>
-		<div class ="chart" id="weather_info"></div>
+		<div id="weatherblock">
+			<div class="weather-app">
+				<div class="left">
+					<div class="temperature">
+						<span id="temperature">0</span>&deg;
+					</div>
+					<div class="location">
+						<span id="location">Unknown</span>
+					</div>
+				</div>
+				<div class="right">
+					<div class="top"><img id="icon" src="imgs/codes/200.png" width="75px"></div>
+					<div class="bottom">
+						<div class="wind">
+							<span id="wind">0</span> mph <span id="direction">N</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="chart" id="daily_chart"></div>
+		<div class="chart" id="weekly_chart"></div>
+		<div class="chart" id="weather_info"></div>
 	</div>
-    <script>
 
-        function pop_stations_list (){
-        var stations_drop = $('#stations_drop');
-			$.getJSON("http://127.0.0.1:5000/stations", function(data) {
+
+	<script > function myFunction() {
+		var x = document.getElementById('weatherblock');
+		if (x.style.display === 'none') {
+			x.style.display = 'block';
+		} else {
+			x.style.display = 'none';
+		}
+	}
+
+	function pop_stations_list() {
+		var stations_drop = $('#stations_drop');
+		$.getJSON("http://127.0.0.1:5000/stations", function(data) {
 			if ('stations' in data) {
-          	var stations = data.stations;
-         	 console.log('stations', stations);
-          	_.forEach(stations, function(station) {
-				//console.log(station.name, station.number);
-				stations_drop.append(
-					$('<option>', {
-					value: station.number,
-					text: station.address
-					}, '</option>')
-                        );
+				var stations = data.stations;
+				console.log('stations', stations);
+				_.forEach(stations, function(station) {
+					//console.log(station.name, station.number);
+					stations_drop.append($('<option>', {
+						value: station.number,
+						text: station.address
+					}, '<\/option>'));
+				})
+			}
+		})
+	};
+	window.onload = pop_stations_list;
 
-        }
-
-                    )}}
-                    )};
-		window.onload = pop_stations_list;
-
-		function initMap() {
-			var myLatLng = {lat: 53.349, lng: -6.27};
-			var map = new google.maps.Map(document.getElementById('map'), {
+	function initMap() {
+		var myLatLng = {
+			lat: 53.349,
+			lng: -6.27
+		};
+		var map = new google.maps.Map(document.getElementById('map'), {
 			zoom: 13,
 			center: myLatLng
-			});
+		});
+		var contentString = '<div id="content">' + '<div id="siteNotice">' + '<\/div>' + '<h1 id="firstHeading" class="firstHeading">Loading...<\/h1>' + '<div id="bodyContent">' + '<p id="current_data"><b>Loading...<\/b><\/p>' + '<\/div>' + '<\/div>';
+		var infowindow = new google.maps.InfoWindow({
+			content: contentString
+		});
 
-		       var contentString = '<div id="content">'+
-      '<div id="siteNotice">'+
-      '</div>'+
-      '<h1 id="firstHeading" class="firstHeading">Loading...</h1>'+
-      '<div id="bodyContent">'+
-      '<p id="current_data"><b>Loading...</b></p>'+
+		function showStationMarkers(data) {
+			$.getJSON("http://127.0.0.1:5000/stations", function(data) {
+				if ('stations' in data) {
+					var stations = data.stations;
+					console.log('stations', stations);
+					_.forEach(stations, function(station) {
+						//console.log(station.name, station.number);
+						var marker = new google.maps.Marker({
+							position: {
+								lat: station.lat,
+								lng: station.lng
+							},
+							map: map,
+							station_number: station.number,
+							address: station.address
+						});
+						map.addListener('center_changed', function() {
+							// 3 seconds after the center of the map has changed, pan back to the
+							// marker.
+							window.setTimeout(function() {
+								map.panTo(marker.getPosition());
+							}, 3000000);
+						});
+						marker.addListener('click', function() {
+							map.setZoom(15);
+							map.setCenter(marker.getPosition());
+						});
+						marker.addListener('click', function() {
+							infowindow.open(map, marker);
+							run_current(marker.station_number, station.address);
+						});
+					});
+				}
+			})
+		};
+		showStationMarkers();
+	};
 
+	function run_current(station_num, address) {
+		$.getJSON("http://127.0.0.1:5000/current/" + station_num, function(data) {
+			if ('available' in data) {
+				var current = data.available;
+				console.log('weekly_chart_data', current);
+				var current_address = $('#firstHeading');
+				var current_data = $('#current_data');
+				current_address.replaceWith("<h1 id='firstHeading'>" + address + "<\/h1>");
+				current_data.replaceWith("<p id='current_data'> Available bikes: " + current[0].available_bikes + "<\/p>");
+			}
+		})
+	};
+	$("#stations_drop").change(function() {
+		run_weekly();
+		run_daily();
+	});
+	$("#days_drop").change(function() {
+		run_daily();
+	});
 
+	function run_weekly() {
+		var stations_value = $('#stations_drop').val();
+		$.getJSON("http://127.0.0.1:5000/available_weekly/" + stations_value, function(data) {
+			if ('available' in data) {
+				var available = data.available;
+				console.log('weekly_chart_data', available);
+				drawChart(available);
+			}
+		})
+	};
 
-      '</div>'+
-      '</div>';
+	function run_daily() {
+		var stations_value = $('#stations_drop').val();
+		var day_value = $('#days_drop').val();
+		$.getJSON("http://127.0.0.1:5000/available_daily/" + stations_value + "/" + day_value, function(data) {
+			if ('available' in data) {
+				var available = data.available;
+				console.log('daily_chart_data', available);
+				drawDailyChart(available);
+			}
+		})
+	};
 
+	function drawChart(available) {
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'Day');
+		data.addColumn('number', 'Bikes Available');
+		data.addRows([
+			['Mon', parseInt(available[1].avg_bikes)],
+			['Tue', parseInt(available[2].avg_bikes)],
+			['Wed', parseInt(available[3].avg_bikes)],
+			['Thu', parseInt(available[4].avg_bikes)],
+			['Fri', parseInt(available[5].avg_bikes)],
+			['Sat', parseInt(available[6].avg_bikes)],
+			['Sun', parseInt(available[0].avg_bikes)]
+		]);
+		var options = {
+			title: 'Average number of bikes available per day',
+			backgroundColor: 'rgba(225,223,226,0.29)',
+			legend: {
+				position: 'bottom'
+			}
+		};
+		var chart = new google.visualization.LineChart(document.getElementById('weekly_chart'));
+		chart.draw(data, options);
+	};
 
-		 var infowindow = new google.maps.InfoWindow({
-                content: contentString
-            });
+	function drawDailyChart(available) {
+		var data = new google.visualization.DataTable();
+		data.addColumn('string', 'hour');
+		data.addColumn('number', 'Bikes Available');
+		data.addRows([
+			['06:00', parseInt(available[0].avg_bikes)],
+			['07:00', parseInt(available[1].avg_bikes)],
+			['08:00', parseInt(available[2].avg_bikes)],
+			['09:00', parseInt(available[3].avg_bikes)],
+			['10:00', parseInt(available[4].avg_bikes)],
+			['11:00', parseInt(available[5].avg_bikes)],
+			['12:00', parseInt(available[6].avg_bikes)],
+			['13:00', parseInt(available[7].avg_bikes)],
+			['14:00', parseInt(available[8].avg_bikes)],
+			['15:00', parseInt(available[9].avg_bikes)],
+			['16:00', parseInt(available[10].avg_bikes)],
+			['17:00', parseInt(available[11].avg_bikes)],
+			['18:00', parseInt(available[12].avg_bikes)],
+			['19:00', parseInt(available[13].avg_bikes)],
+			['20:00', parseInt(available[14].avg_bikes)],
+			['21:00', parseInt(available[15].avg_bikes)],
+			['22:00', parseInt(available[16].avg_bikes)],
+			['23:00', parseInt(available[16].avg_bikes)]
+		]);
+		var options = {
+			title: 'Average number of bikes available for station',
+			backgroundColor: 'rgba(225,223,226,0.29)',
+			legend: {
+				position: 'bottom'
+			}
+		};
+		var chart = new google.visualization.LineChart(document.getElementById('daily_chart'));
+		chart.draw(data, options);
+	}
+	var APPID = "4cd167bc85dff937818ea9a5eb6fa550";
+	var temp;
+	var loc;
+	var icon;
+	var wind;
+	var direction;
+	var city_id = "2964574"
 
+	function updateByZip(city_id) {
+		var url = "http://api.openweathermap.org/data/2.5/weather?q=DublinIE&APPID=4cd167bc85dff937818ea9a5eb6fa550";
+		sendRequest(url);
+	}
 
+	function sendRequest(url) {
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				var data = JSON.parse(xmlhttp.responseText);
+				var weather = {};
+				weather.icon = data.weather[0].id;
+				weather.wind = data.wind.speed;
+				weather.temp = kelvin2c(data.main.temp);
+				weather.direction = degdir(data.wind.deg);
+				weather.loc = "Dublin City";
+				update(weather);
+			}
+		};
+		xmlhttp.open("GET", url, true);
+		xmlhttp.send();
+	}
 
+	function kelvin2c(k) {
+		return Math.round(k - 273.15);
+	}
 
+	function degdir(degrees) {
+		var range = 360 / 16;
+		var low = 360 - range / 2 % 360;
+		var high = low + range;
+		var angles = ["North", "NNE", "ENE", "East", "ESE", "SE", "SSE", "South", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"]
+		for (i in angles) {
+			if (degrees >= low && degrees < high) return angles[i];
+			low = (low + range) % 360;
+			high = (high + range) % 360;
+		}
+		return "poo";
+	}
 
-
-        function showStationMarkers(data) {
-        $.getJSON("http://127.0.0.1:5000/stations", function(data) {
-      	if ('stations' in data) {
-        var stations = data.stations;
-        console.log('stations', stations);
-        _.forEach(stations, function(station) {
-			//console.log(station.name, station.number);
-            var marker = new google.maps.Marker({ position : {
-                lat : station.lat,
-                lng : station.lng},
-				map : map,
-				station_number : station.number,
-                address: station.address
-});
-
-                    map.addListener('center_changed', function() {
-          // 3 seconds after the center of the map has changed, pan back to the
-          // marker.
-          window.setTimeout(function() {
-            map.panTo(marker.getPosition());
-          }, 3000000);
-        });
-
-        marker.addListener('click', function() {
-          map.setZoom(15);
-          map.setCenter(marker.getPosition());
-        });
-
-        marker.addListener('click', function() {
-    infowindow.open(map, marker);
-    run_current(marker.station_number, station.address);
-  });
-
-
-        });
-      }})};
-
-      showStationMarkers();
-      };
-
-        function run_current(station_num, address){
-            $.getJSON("http://127.0.0.1:5000/current/" + station_num, function(data) {
-		if ('available' in data) {
-            var current = data.available;
-            console.log('weekly_chart_data', current);
-            var current_address = $('#firstHeading');
-            var current_data = $('#current_data');
-            current_address.replaceWith("<h1 id='firstHeading'>" + address + "</h1>");
-            current_data.replaceWith("<p id='current_data'> Available bikes: " + current[0].available_bikes + "</p>");
-
-
-        }})};
-
-$( "#stations_drop" ).change(function() {
-  run_weekly();
-    run_daily();
-});
-
-$( "#days_drop" ).change(function() {
-    run_daily();
-});
-
-  function run_weekly() {
-  var stations_value = $('#stations_drop').val();
-  $.getJSON("http://127.0.0.1:5000/available_weekly/" + stations_value, function(data) {
-		if ('available' in data) {
-        var available = data.available;
-        console.log('weekly_chart_data', available);
-        drawChart(available);
-        }
-        }
-            )};
-function run_daily() {
-  var stations_value = $('#stations_drop').val();
-    var day_value = $('#days_drop').val();
-  $.getJSON("http://127.0.0.1:5000/available_daily/" + stations_value + "/" + day_value, function(data) {
-		if ('available' in data) {
-        var available = data.available;
-        console.log('daily_chart_data', available);
-        drawDailyChart(available);
-        }
-        }
-            )};
-
-function drawChart(available) {
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Day');
-    data.addColumn('number', 'Bikes Available');
-    data.addRows([
-        ['Mon', parseInt(available[1].avg_bikes)],
-        ['Tue', parseInt(available[2].avg_bikes)],
-        ['Wed', parseInt(available[3].avg_bikes)],
-        ['Thu', parseInt(available[4].avg_bikes)],
-        ['Fri', parseInt(available[5].avg_bikes)],
-        ['Sat', parseInt(available[6].avg_bikes)],
-        ['Sun', parseInt(available[0].avg_bikes)]
-  ]);
-            var options = {
-              title: 'Average number of bikes available per day',
-                              backgroundColor: 'rgba(225,223,226,0.29)',
-
-              legend: {position: 'bottom'}
-            };
-
-        var chart = new google.visualization.LineChart(document.getElementById('weekly_chart'));
-
-        chart.draw(data, options);
-      };
-        
-function drawDailyChart(available) {
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'hour');
-    data.addColumn('number', 'Bikes Available');    
-    data.addRows([
-        ['06:00', parseInt(available[0].avg_bikes)],
-        ['07:00', parseInt(available[1].avg_bikes)],
-        ['08:00', parseInt(available[2].avg_bikes)],
-        ['09:00', parseInt(available[3].avg_bikes)],
-        ['10:00', parseInt(available[4].avg_bikes)],
-        ['11:00', parseInt(available[5].avg_bikes)],
-        ['12:00', parseInt(available[6].avg_bikes)],
-        ['13:00', parseInt(available[7].avg_bikes)],
-        ['14:00', parseInt(available[8].avg_bikes)],
-        ['15:00', parseInt(available[9].avg_bikes)],
-        ['16:00', parseInt(available[10].avg_bikes)],
-        ['17:00', parseInt(available[11].avg_bikes)],
-        ['18:00', parseInt(available[12].avg_bikes)],
-        ['19:00', parseInt(available[13].avg_bikes)],
-        ['20:00', parseInt(available[14].avg_bikes)],
-        ['21:00', parseInt(available[15].avg_bikes)],
-        ['22:00', parseInt(available[16].avg_bikes)],
-        ['23:00', parseInt(available[16].avg_bikes)]
-  ]);
-            var options = {
-              title: 'Average number of bikes available for station',
-                backgroundColor: 'rgba(225,223,226,0.29)',
-
-              
-              legend: {position: 'bottom'}
-            };
-
-        var chart = new google.visualization.LineChart(document.getElementById('daily_chart'));
-
-        chart.draw(data, options);
-      };
-
-    </script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB13DSvYSxFIptwyDuFm4oqFuAeMJiLDmg&callback=initMap">
-    </script>
-
-       <div id="image">
-
-        <img src="http://www.stickybottle.com/wp-content/uploads/2016/04/Bikes.jpg
-" alt="W3Schools.com">
-            </div>
-  </body>
+	function update(weather) {
+		wind.innerHTML = weather.wind;
+		direction.innerHTML = weather.direction;
+		loc.innerHTML = weather.loc;
+		icon.src = "imgs/codes/" + weather.icon + ".png";
+		temp.innerHTML = weather.temp;
+	}
+	window.onload = function() {
+		temp = document.getElementById("temperature");
+		loc = document.getElementById("location");
+		icon = document.getElementById("icon");
+		wind = document.getElementById("wind");
+		direction = document.getElementById("direction");
+		updateByZip(2964574);
+	} </script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB13DSvYSxFIptwyDuFm4oqFuAeMJiLDmg&callback=initMap">
+	</script>
+</body>
 </html>
