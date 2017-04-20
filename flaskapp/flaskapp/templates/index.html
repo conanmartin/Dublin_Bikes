@@ -227,7 +227,7 @@ function initMap() {
 	});
 
 	function showStationMarkers(data) {
-		$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com   /stations", function(data) {
+		$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com/stations", function(data) {
 			if ('stations' in data) {
 				var stations = data.stations;
 				console.log('stations', stations);
