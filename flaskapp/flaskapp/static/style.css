@@ -1,0 +1,162 @@
+
+#weatherblock {
+	position: fixed;
+	margin-top: 1%;
+	margin-left: 73%;
+	display: none;
+}
+
+.weather-app {
+	margin: auto;
+	width: 300px;
+	height: 170px;
+	box-shadow: 1px 1px 70px #afafaf;
+	overflow: hidden;
+	text-align: center;
+	padding-right: 20px;
+	background: white;
+	font-family: 'Lato', sans-serif;
+}
+
+.left {
+	float: left;
+	background: white;
+	padding: 10px;
+	width: 150px;
+	height: 100%;
+	color: #000000;
+	font-family: 'Lato', sans-serif;
+}
+
+.temperature {
+	padding-top: 18px;
+	margin-top: 30px;
+	margin-bottom: 5px;
+	font-size: 32px;
+	font-weight: bold;
+	width: 150px;
+	background: white;
+}
+
+.location {
+	font-size: 18px;
+	width: 10%;
+	width: 150px;
+	font-family: 'Lato', sans-serif;
+	background: white;
+}
+
+.top img {
+	margin-top: 24px;
+}
+
+.right {
+	font-family: helvetica;
+	float: right;
+	width: 130px;
+	height: 100%;
+	background: white;
+}
+
+.top {
+	height: 100px;
+	width: 100%;
+	margin: auto;
+	background: white;
+}
+
+.bottom {
+	height: 70px;
+	background: white;
+	color: 000000;
+	font-weight: bold;
+	padding-bottom: 30px;
+	margin-bottom: 0px;
+	font-family: 'Lato', sans-serif;
+}
+
+.wind {}
+
+#title {
+	background-color: rgba(206, 204, 207, 0.33);
+	text-align: center;
+	padding-top: 12px;
+	padding-bottom: 8px;
+	font-family: 'Lato', sans-serif;
+	font-size: 60px;
+}
+
+#message {
+	background-color: rgba(206, 204, 207, 0.33);
+	text-align: center;
+	padding-top: 8px;
+	padding-bottom: 8px;
+	font-family: 'Lato', sans-serif;
+	font-size: 20px;
+}
+
+#full {
+	background-color: rgba(206, 204, 207, 0.33);
+}
+
+#drop_downs {
+	background-color: rgba(206, 204, 207, 0.33);
+	text-align: center;
+	margin: auto;
+	padding-top: 14px;
+	width: 100%;
+}
+
+#charts_div {
+	background-color: rgba(206, 204, 207, 0.33);
+	text-align: center;
+	padding-top: 20px;
+}
+
+#map {
+	height: 52%;
+}
+
+html, body {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#charts_div {
+	width: 100%;
+	height: 25%;
+}
+
+#daily_chart {
+	height: 100%:
+}
+
+.chart {
+	width: 32%;
+	height 25%;
+	display: inline-block;
+	box-shadow: 1px 1px 70px #afafaf;
+	border-spacing: 10px;
+}
+
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+	background-color: #333;
+	font-family: 'Lato', sans-serif;
+}
+
+li {
+	float: center;
+}
+
+li a {
+	display: block;
+	color: white;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+}
