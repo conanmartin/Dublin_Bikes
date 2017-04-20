@@ -49,7 +49,8 @@ def bike_extract(file_name, print_output):
 		print("Error")
 		error_time = time.time()
 		f = open('error_log', 'a')
-		f.write('Error at: ' + error_time + '\n')
+		f.write('Error at:')
+		f.write(error_time)
 		f.close()
 		pass
 
