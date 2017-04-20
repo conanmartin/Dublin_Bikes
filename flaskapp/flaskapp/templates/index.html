@@ -188,7 +188,7 @@ function update(weather) {
 
 function pop_stations_list() {
 	var stations_drop = $('#stations_drop');
-	$.getJSON("ec2-35-160-109-80.us-west-2.compute.amazonaws.com/stations", function(data) {
+	$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com/stations", function(data) {
 		if ('stations' in data) {
 			var stations = data.stations;
 			console.log('stations', stations);
@@ -227,7 +227,7 @@ function initMap() {
 	});
 
 	function showStationMarkers(data) {
-		$.getJSON("ec2-35-160-109-80.us-west-2.compute.amazonaws.com/stations", function(data) {
+		$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com   /stations", function(data) {
 			if ('stations' in data) {
 				var stations = data.stations;
 				console.log('stations', stations);
@@ -293,7 +293,7 @@ function initMap() {
 };
 
 function run_current(station_num, address) {
-	$.getJSON("ec2-35-160-109-80.us-west-2.compute.amazonaws.com/current/" + station_num, function(data) {
+	$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com/current/" + station_num, function(data) {
 		if ('available' in data) {
 			var current = data.available;
 			console.log('weekly_chart_data', current);
@@ -314,7 +314,7 @@ $("#days_drop").change(function() {
 
 function run_weekly() {
 	var stations_value = $('#stations_drop').val();
-	$.getJSON("ec2-35-160-109-80.us-west-2.compute.amazonaws.com/available_weekly/" + stations_value, function(data) {
+	$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com/available_weekly/" + stations_value, function(data) {
 		if ('available' in data) {
 			var available = data.available;
 			console.log('weekly_chart_data', available);
@@ -326,7 +326,7 @@ function run_weekly() {
 function run_daily() {
 	var stations_value = $('#stations_drop').val();
 	var day_value = $('#days_drop').val();
-	$.getJSON("ec2-35-160-109-80.us-west-2.compute.amazonaws.com/available_daily/" + stations_value + "/" + day_value, function(data) {
+	$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com/available_daily/" + stations_value + "/" + day_value, function(data) {
 		if ('available' in data) {
 			var available = data.available;
 			console.log('daily_chart_data', available);
