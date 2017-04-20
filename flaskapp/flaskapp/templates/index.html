@@ -99,7 +99,7 @@
 
 					<div class="bottom">
 						<div class="wind">
-							<span id="wind">0</span> mph <span id="direction">N</span>
+							<span id="wind">0</span> kph <span id="direction">N</span>
 						</div>
 					</div>
 				</div>
@@ -107,7 +107,7 @@
 		</div>
 
 
-		<div class="chart" id="daily_chart">
+			<div class="chart" id="daily_chart">
 		</div>
 
 
@@ -115,22 +115,25 @@
 		</div>
 
 
-		<div class="chart" id="weather_info">
-		</div>
-	</div>
+
+
 
 
 	<script >
 
 
+
 function myFunction() {
-	var x = document.getElementById('weatherblock');
-	if (x.style.display === 'none') {
-		x.style.display = 'block';
-	} else {
-		x.style.display = 'none';
-	}
+    var x = document.getElementById('weatherblock');
+    if (!x.style.display || x.style.display == "none") {
+        x.style.display = "block";
+    }
+    else {
+        x.style.display = "none";
+    }
 }
+
+
 var APPID = "4cd167bc85dff937818ea9a5eb6fa550";
 var temp;
 var loc;
@@ -151,11 +154,12 @@ function sendRequest(url) {
 			var data = JSON.parse(xmlhttp.responseText);
 			var weather = {};
 			weather.icon = data.weather[0].icon;
-			weather.wind = data.wind.speed;
+			weather.wind = speedo(data.wind.speed);
 			weather.temp = kelvin2c(data.main.temp);
 			weather.direction = degdir(data.wind.deg);
 			weather.loc = "Dublin City";
 			update(weather);
+
 		}
 	};
 	xmlhttp.open("GET", url, true);
@@ -164,6 +168,12 @@ function sendRequest(url) {
 
 function kelvin2c(k) {
 	return Math.round(k - 273.15);
+
+}
+
+function speedo(k) {
+	return Math.round(k*1.609);
+
 }
 
 function degdir(degrees) {
@@ -184,11 +194,15 @@ function update(weather) {
 	loc.innerHTML = weather.loc;
 	icon.src = "http://openweathermap.org/img/w/" + weather.icon + ".png";
 	temp.innerHTML = weather.temp;
+
+
 }
+
+
 
 function pop_stations_list() {
 	var stations_drop = $('#stations_drop');
-	$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com/stations", function(data) {
+	$.getJSON("/stations", function(data) {
 		if ('stations' in data) {
 			var stations = data.stations;
 			console.log('stations', stations);
@@ -220,6 +234,7 @@ function initMap() {
 	var map = new google.maps.Map(document.getElementById('map'), {
 		zoom: 13,
 		center: myLatLng
+
 	});
 	var contentString = '<div id="content">' + '<div id="siteNotice">' + '<\/div>' + '<h1 id="firstHeading" class="firstHeading">Loading...<\/h1>' + '<div id="bodyContent">' + '<p id="current_data"><b>Loading...<\/b><\/p>' + '<\/div>' + '<\/div>';
 	var infowindow = new google.maps.InfoWindow({
@@ -227,7 +242,7 @@ function initMap() {
 	});
 
 	function showStationMarkers(data) {
-		$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com/stations", function(data) {
+		$.getJSON("http://127.0.0.1:5000/stations", function(data) {
 			if ('stations' in data) {
 				var stations = data.stations;
 				console.log('stations', stations);
@@ -244,11 +259,12 @@ function initMap() {
 						animation: google.maps.Animation.DROP,
                         percent: station.percent
 					});
-                    if(marker.percent>0.5){marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');}
-                    else if(marker.percent>0.2){marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');}
-                    else{marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');}
-                    
-                    
+                    if(marker.percent>=0.5){marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');}
+                    else if(marker.percent>=0.2){marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');}
+                    else if(marker.percent<0.2){marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');}
+
+
+
 					marker.addListener('click', toggleBounce);
 
 					function toggleBounce() {
@@ -293,7 +309,7 @@ function initMap() {
 };
 
 function run_current(station_num, address) {
-	$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com/current/" + station_num, function(data) {
+	$.getJSON("http://127.0.0.1:5000/current/" + station_num, function(data) {
 		if ('available' in data) {
 			var current = data.available;
 			console.log('weekly_chart_data', current);
@@ -314,7 +330,7 @@ $("#days_drop").change(function() {
 
 function run_weekly() {
 	var stations_value = $('#stations_drop').val();
-	$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com/available_weekly/" + stations_value, function(data) {
+	$.getJSON("http://127.0.0.1:5000/available_weekly/" + stations_value, function(data) {
 		if ('available' in data) {
 			var available = data.available;
 			console.log('weekly_chart_data', available);
@@ -326,7 +342,7 @@ function run_weekly() {
 function run_daily() {
 	var stations_value = $('#stations_drop').val();
 	var day_value = $('#days_drop').val();
-	$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com/available_daily/" + stations_value + "/" + day_value, function(data) {
+	$.getJSON("http://127.0.0.1:5000/available_daily/" + stations_value + "/" + day_value, function(data) {
 		if ('available' in data) {
 			var available = data.available;
 			console.log('daily_chart_data', available);
@@ -393,7 +409,11 @@ function drawDailyChart(available) {
 	};
 	var chart = new google.visualization.LineChart(document.getElementById('daily_chart'));
 	chart.draw(data, options);
-} </script>
+}
+
+
+
+	</script>
 	<script async defer src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyB13DSvYSxFIptwyDuFm4oqFuAeMJiLDmg&callback=initMap">
 	</script>
 
