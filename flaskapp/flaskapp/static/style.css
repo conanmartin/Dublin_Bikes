@@ -1,4 +1,3 @@
-
 #weatherblock {
 	position: fixed;
 	margin-top: 1%;
@@ -10,7 +9,6 @@
 	margin: auto;
 	width: 300px;
 	height: 170px;
-	box-shadow: 1px 1px 70px #afafaf;
 	overflow: hidden;
 	text-align: center;
 	padding-right: 20px;
@@ -83,7 +81,7 @@
 	padding-top: 12px;
 	padding-bottom: 8px;
 	font-family: 'Lato', sans-serif;
-	font-size: 60px;
+	font-size: 50px;
 }
 
 #message {
@@ -105,6 +103,7 @@
 	margin: auto;
 	padding-top: 14px;
 	width: 100%;
+
 }
 
 #charts_div {
@@ -121,6 +120,7 @@ html, body {
 	height: 100%;
 	margin: 0;
 	padding: 0;
+    overflow: hidden;
 }
 
 #charts_div {
@@ -134,10 +134,14 @@ html, body {
 
 .chart {
 	width: 32%;
-	height 25%;
+	height: 90%;
 	display: inline-block;
-	box-shadow: 1px 1px 70px #afafaf;
 	border-spacing: 10px;
+    padding-bottom: 10px;
+    margin-right: 20px;
+    float: left;
+    margin-left: 3%;
+
 }
 
 ul {
@@ -147,6 +151,9 @@ ul {
 	overflow: hidden;
 	background-color: #333;
 	font-family: 'Lato', sans-serif;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
 }
 
 li {
