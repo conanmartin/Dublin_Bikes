@@ -14,7 +14,7 @@
 	</script>
 	<script type="text/javascript">
 	   google.charts.load('current', {'packages':['corechart']});
-	        google.charts.setOnLoadCallback(drawChart);
+	   google.charts.setOnLoadCallback(drawChart);
 	</script>
 	<meta content="initial-scale=1.0, user-scalable=no" name="viewport">
 	<meta charset="utf-8">
@@ -39,7 +39,13 @@
 
 	<div id="drop_downs">
 		<select id="stations_drop" name="Stations">
+			<option selected="selected" disabled="disabled">
+				Select a station
+			</option>
 		</select> <select id="days_drop" name="Days">
+			<option selected="selected" disabled="disabled">
+				Select a day
+			</option>
 			<option value="1">
 				Monday
 			</option>
@@ -256,10 +262,21 @@ function initMap() {
 					});
 					marker.addListener('click', function() {
 						map.setZoom(15);
+						var d = new Date();
+						var today = d.getDay();
 						map.setCenter(marker.getPosition());
+						document.getElementById('stations_drop').value=station.number;
+						document.getElementById('days_drop').value=today;
+						run_weekly();
+						run_daily();
+
 					});
 					marker.addListener('click', function() {
 						infowindow.open(map, marker);
+						var current_address = $('#firstHeading');
+						var current_data = $('#current_data');
+						current_address.replaceWith("<h1 id='firstHeading'>Loading...<\/h1>");
+						current_data.replaceWith("<p id='current_data'>Loading...<\/p>");
 						run_current(marker.station_number, station.address);
 					});
 				});
@@ -277,7 +294,7 @@ function run_current(station_num, address) {
 			var current_address = $('#firstHeading');
 			var current_data = $('#current_data');
 			current_address.replaceWith("<h1 id='firstHeading'>" + address + "<\/h1>");
-			current_data.replaceWith("<p id='current_data'> Available bikes: " + current[0].available_bikes + "<\/p>");
+			current_data.replaceWith("<p id='current_data'>Available bikes: " + current[0].available_bikes + "<br><br>Available stands: " + current[0].available_bike_stands + "<\/p>");
 		}
 	})
 };
