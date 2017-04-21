@@ -41,16 +41,15 @@ def bike_extract(file_name, print_output):
 
 		# to mySQL
 		# creates temporary table with latest df, then adds non-existing rows to bikes_dynamic.
-		engine = create_engine("mysql+pymysql://DavidSurridge:MyGerryAdams@dublinbikesmysql.cqcpf75mkbbq.us-west-2.rds.amazonaws.com:3306/myDublinBikes", echo = True)
+		engine = create_engine("mysql+pymysql://DavidSurridge:yGerryAdams@dublinbikesmysql.cqcpf75mkbbq.us-west-2.rds.amazonaws.com:3306/myDublinBikes", echo = True)
 		clean_df.to_sql(name='temp_table', con=engine, if_exists='replace', index=False)
 		connection = engine.connect()
 		connection.execute("INSERT INTO bikes_dynamic SELECT * FROM temp_table ON DUPLICATE KEY UPDATE bikes_dynamic.status=temp_table.status")
 	except:
 		print("Error")
-		error_time = time.time()
+		error_time = str(time.time())
 		f = open('error_log', 'a')
-		f.write('Error at:')
-		f.write(error_time)
+		f.write('\nError at: ' + error_time)
 		f.close()
 		pass
 
