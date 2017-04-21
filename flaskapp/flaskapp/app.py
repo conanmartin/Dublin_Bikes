@@ -25,7 +25,7 @@ def get_stations():
     engine = connect_to_database()
     conn = engine.connect()
     stations = []
-    rows = conn.execute("SELECT * from bikes_static ORDER BY address;")
+    rows = conn.execute("SELECT *, b.available_bikes/a.bike_stands as 'percent' from bikes_static a, temp_table b where a.number= b.number order by a.address;")
     for row in rows:
         stations.append(dict(row))
 
