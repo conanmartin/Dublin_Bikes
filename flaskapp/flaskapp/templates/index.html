@@ -229,7 +229,7 @@ function initMap() {
 	});
 	//function that plots the markers on the map depending on their latitude and longitude
 	function showStationMarkers(data) {
-		$.getJSON("http://127.0.0.1:5000/stations", function(data) {
+		$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com/stations", function(data) {
 			if ('stations' in data) {
 				var stations = data.stations;
 				console.log('stations', stations);
@@ -302,7 +302,7 @@ function initMap() {
 };
 // this function will assign the avalibale bikes and available spaces to the info boxes.
 function run_current(station_num, address) {
-	$.getJSON("http://127.0.0.1:5000/current/" + station_num, function(data) {
+	$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com/current/" + station_num, function(data) {
 		if ('available' in data) {
 			var current = data.available;
 			console.log('weekly_chart_data', current);
@@ -323,7 +323,7 @@ $("#days_drop").change(function() {
 
 function run_weekly() {
 	var stations_value = $('#stations_drop').val();
-	$.getJSON("http://127.0.0.1:5000/available_weekly/" + stations_value, function(data) {
+	$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com/available_weekly/" + stations_value, function(data) {
 		if ('available' in data) {
 			var available = data.available;
 			console.log('weekly_chart_data', available);
@@ -335,7 +335,7 @@ function run_weekly() {
 function run_daily() {
 	var stations_value = $('#stations_drop').val();
 	var day_value = $('#days_drop').val();
-	$.getJSON("http://127.0.0.1:5000/available_daily/" + stations_value + "/" + day_value, function(data) {
+	$.getJSON("http://ec2-35-160-109-80.us-west-2.compute.amazonaws.com/available_daily/" + stations_value + "/" + day_value, function(data) {
 		if ('available' in data) {
 			var available = data.available;
 			console.log('daily_chart_data', available);
