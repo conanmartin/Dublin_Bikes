@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 
+<!-- TESTING COMPLETED ON GOOGLE CHROME -->
+
 <html>
 <head>
 	<link href="{{ url_for('static',filename='style.css') }}" rel="stylesheet" type="text/css">
@@ -13,8 +15,8 @@
 	<script src="https://www.gstatic.com/charts/loader.js" type="text/javascript">
 	</script>
 	<script type="text/javascript">
-	   google.charts.load('current', {'packages':['corechart']});
-	   google.charts.setOnLoadCallback(drawChart);
+	      google.charts.load('current', {'packages':['corechart']});
+	      google.charts.setOnLoadCallback(drawChart);
 	</script>
 	<meta content="initial-scale=1.0, user-scalable=no" name="viewport">
 	<meta charset="utf-8">
@@ -39,13 +41,14 @@
 
 	<div id="drop_downs">
 		<select id="stations_drop" name="Stations">
-			<option selected="selected" disabled="disabled">
+			<option disabled="disabled" selected="selected">
 				Select a station
 			</option>
 		</select> <select id="days_drop" name="Days">
-			<option selected="selected" disabled="disabled">
+			<option disabled="disabled" selected="selected">
 				Select a day
 			</option>
+
 			<option value="1">
 				Monday
 			</option>
@@ -107,33 +110,24 @@
 		</div>
 
 
-			<div class="chart" id="daily_chart">
+		<div class="chart" id="daily_chart">
 		</div>
 
 
 		<div class="chart" id="weekly_chart">
 		</div>
+	</div>
 
-
-
-
-
-
-	<script >
-
-
-
-function myFunction() {
-    var x = document.getElementById('weatherblock');
-    if (!x.style.display || x.style.display == "none") {
-        x.style.display = "block";
-    }
-    else {
-        x.style.display = "none";
-    }
-}
-
-
+<script>
+	//function to show an hide the weather block
+	function myFunction() {
+		var x = document.getElementById('weatherblock');
+		if (!x.style.display || x.style.display == "none") {
+			x.style.display = "block";
+		} else {
+			x.style.display = "none";
+		}
+	}
 var APPID = "4cd167bc85dff937818ea9a5eb6fa550";
 var temp;
 var loc;
@@ -146,7 +140,7 @@ function updateByZip(city_id) {
 	var url = "http://api.openweathermap.org/data/2.5/weather?q=DublinIE&APPID=4cd167bc85dff937818ea9a5eb6fa550";
 	sendRequest(url);
 }
-
+//function to update weather variables
 function sendRequest(url) {
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
@@ -159,23 +153,20 @@ function sendRequest(url) {
 			weather.direction = degdir(data.wind.deg);
 			weather.loc = "Dublin City";
 			update(weather);
-
 		}
 	};
 	xmlhttp.open("GET", url, true);
 	xmlhttp.send();
 }
-
+//function to convert raw temperature data
 function kelvin2c(k) {
 	return Math.round(k - 273.15);
-
 }
-
+//function to convert raw wind speed from mph to kph
 function speedo(k) {
-	return Math.round(k*1.609);
-
+	return Math.round(k * 1.609);
 }
-
+//function to define the wind direction (degrees to common directional terms)
 function degdir(degrees) {
 	var range = 360 / 16;
 	var low = 360 - range / 2 % 360;
@@ -187,19 +178,15 @@ function degdir(degrees) {
 		high = (high + range) % 360;
 	}
 }
-
+//function to update weather variables
 function update(weather) {
 	wind.innerHTML = weather.wind;
 	direction.innerHTML = weather.direction;
 	loc.innerHTML = weather.loc;
 	icon.src = "http://openweathermap.org/img/w/" + weather.icon + ".png";
 	temp.innerHTML = weather.temp;
-
-
 }
-
-
-
+//function to populate stations
 function pop_stations_list() {
 	var stations_drop = $('#stations_drop');
 	$.getJSON("/stations", function(data) {
@@ -216,16 +203,17 @@ function pop_stations_list() {
 		}
 	})
 };
+// this section means that the weather and station data is to be loaded when the page is loaded.
 window.onload = function() {
-	temp = document.getElementById("temperature");
-	loc = document.getElementById("location");
-	icon = document.getElementById("icon");
-	wind = document.getElementById("wind");
-	direction = document.getElementById("direction");
-	updateByZip(2964574);
-	pop_stations_list();
-}
-
+		temp = document.getElementById("temperature");
+		loc = document.getElementById("location");
+		icon = document.getElementById("icon");
+		wind = document.getElementById("wind");
+		direction = document.getElementById("direction");
+		updateByZip(2964574);
+		pop_stations_list();
+	}
+	//function to initialize the map area
 function initMap() {
 	var myLatLng = {
 		lat: 53.349,
@@ -234,13 +222,12 @@ function initMap() {
 	var map = new google.maps.Map(document.getElementById('map'), {
 		zoom: 13,
 		center: myLatLng
-
 	});
 	var contentString = '<div id="content">' + '<div id="siteNotice">' + '<\/div>' + '<h1 id="firstHeading" class="firstHeading">Loading...<\/h1>' + '<div id="bodyContent">' + '<p id="current_data"><b>Loading...<\/b><\/p>' + '<\/div>' + '<\/div>';
 	var infowindow = new google.maps.InfoWindow({
 		content: contentString
 	});
-
+	//function that plots the markers on the map depending on their latitude and longitude
 	function showStationMarkers(data) {
 		$.getJSON("http://127.0.0.1:5000/stations", function(data) {
 			if ('stations' in data) {
@@ -257,14 +244,17 @@ function initMap() {
 						station_number: station.number,
 						address: station.address,
 						animation: google.maps.Animation.DROP,
-                        percent: station.percent
+						percent: station.percent
 					});
-                    if(marker.percent>=0.5){marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');}
-                    else if(marker.percent>=0.2){marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');}
-                    else if(marker.percent<0.2){marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');}
-
-
-
+					//how the map markers are coloured depending on their percentage of occupancy. (red/yellow/green)
+					if (marker.percent >= 0.5) {
+						marker.setIcon('http://maps.google.com/mapfiles/ms/icons/green-dot.png');
+					} else if (marker.percent >= 0.2) {
+						marker.setIcon('http://maps.google.com/mapfiles/ms/icons/yellow-dot.png');
+					} else if (marker.percent < 0.2) {
+						marker.setIcon('http://maps.google.com/mapfiles/ms/icons/red-dot.png');
+					}
+					//set of events and animations to improve marker interactivity.
 					marker.addListener('click', toggleBounce);
 
 					function toggleBounce() {
@@ -275,6 +265,7 @@ function initMap() {
 							marker.setAnimation(4);
 						}
 					}
+					//move current position on map to centre on new clicked marker.
 					map.addListener('center_changed', function() {
 						// 3 seconds after the center of the map has changed, pan back to the
 						// marker.
@@ -287,12 +278,12 @@ function initMap() {
 						var d = new Date();
 						var today = d.getDay();
 						map.setCenter(marker.getPosition());
-						document.getElementById('stations_drop').value=station.number;
-						document.getElementById('days_drop').value=today;
+						document.getElementById('stations_drop').value = station.number;
+						document.getElementById('days_drop').value = today;
 						run_weekly();
 						run_daily();
-
 					});
+					//Displays loading until there is a reponse with the updated information in the marker info box
 					marker.addListener('click', function() {
 						infowindow.open(map, marker);
 						var current_address = $('#firstHeading');
@@ -305,9 +296,10 @@ function initMap() {
 			}
 		})
 	};
+	//call to display the markers
 	showStationMarkers();
 };
-
+// this function will assign the avalibale bikes and available spaces to the info boxes.
 function run_current(station_num, address) {
 	$.getJSON("http://127.0.0.1:5000/current/" + station_num, function(data) {
 		if ('available' in data) {
@@ -350,7 +342,7 @@ function run_daily() {
 		}
 	})
 };
-
+// this function draws the chart showing the average usage per day
 function drawChart(available) {
 	var data = new google.visualization.DataTable();
 	data.addColumn('string', 'Day');
@@ -374,7 +366,7 @@ function drawChart(available) {
 	var chart = new google.visualization.LineChart(document.getElementById('weekly_chart'));
 	chart.draw(data, options);
 };
-
+//funtion to define the parameters of the hourly occupancy chart
 function drawDailyChart(available) {
 	var data = new google.visualization.DataTable();
 	data.addColumn('string', 'hour');
@@ -410,13 +402,8 @@ function drawDailyChart(available) {
 	var chart = new google.visualization.LineChart(document.getElementById('daily_chart'));
 	chart.draw(data, options);
 }
-
-
-
-	</script>
-	<script async defer src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyB13DSvYSxFIptwyDuFm4oqFuAeMJiLDmg&callback=initMap">
-	</script>
-
+// API key + access to utilize google maps API
+</script> <script async defer src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyB13DSvYSxFIptwyDuFm4oqFuAeMJiLDmg&callback=initMap"> </script>
 
 <ul>
   <li><a class="active">Developed With Love by Infinite Loop</a></li>
